@@ -10,6 +10,7 @@ module EditBuffer
      , insertLineAfter
      , deleteLine
      , moveLeft, moveRight, moveUp, moveDown
+     , moveRightOver
      , moveToHome, moveToEnd, moveToLine
      , moveToLineStart, moveToLineEnd
      , wordForward, wordBackward
@@ -70,6 +71,9 @@ moveLeft  = saturate (-1, 0)
 moveRight = saturate ( 1, 0)
 moveUp    = saturate ( 0,-1)
 moveDown  = saturate ( 0, 1)
+
+moveRightOver :: EditBuffer -> EditBuffer
+moveRightOver = overSatX 1;
 
 moveToHome :: EditBuffer -> EditBuffer
 moveToHome (EditBuffer topLine _ contents) = EditBuffer topLine (0,0) contents
@@ -162,6 +166,10 @@ saturate (adjX,adjY)  = satX adjX . satY adjY
 satX :: Int -> EditBuffer -> EditBuffer
 satX adjX buffer@(EditBuffer topLine (x,y) contents) =
   EditBuffer topLine (saturateValue (currentLineLength buffer) (x + adjX), y) contents
+
+overSatX :: Int -> EditBuffer -> EditBuffer
+overSatX adjX buffer@(EditBuffer topLine (x,y) contents) =
+  EditBuffer topLine (saturateValue ((currentLineLength buffer)+1) (x + adjX), y) contents
 
 satY :: Int -> EditBuffer -> EditBuffer
 satY adjY buffer@(EditBuffer topLine (x,y) contents) = 

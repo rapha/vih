@@ -22,7 +22,7 @@ mainLoop mode previousBuffer =
      if mode == Insert
        then 
          case ch of 
-           '\ESC' -> mainLoop Command (enterCommandMode buffer)
+           '\ESC' -> mainLoop Command (enterCommandMode (moveLeft buffer))
            _      -> if isInputChar ch 
                        then mainLoop mode (insertChar ch buffer)
                        else mainLoop mode buffer
@@ -30,6 +30,7 @@ mainLoop mode previousBuffer =
          case ch of
            ':' -> handleCommandLine buffer
            'i' -> mainLoop Insert buffer
+           'a' -> mainLoop Insert (moveRightOver buffer)
            'h' -> mainLoop mode (moveLeft buffer)
            'j' -> mainLoop mode (moveDown buffer)
            'k' -> mainLoop mode (moveUp buffer) 
