@@ -1,5 +1,4 @@
 
-
 import Test.QuickCheck
 import EditBuffer
 
@@ -12,5 +11,5 @@ prop_insert_delete_inverse ch =
 
 prop_insert_char_advances n = 
   n >= 0 ==> n == x
-               where (EditBuffer(x,_) contents) = (iterate (insertChar 'a') emptyBuffer) !! n
+               where (EditBuffer _ (x,_) contents) = (iterate (insertChar 'a') emptyBuffer) !! n
 
